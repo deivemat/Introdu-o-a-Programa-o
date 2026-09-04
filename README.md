@@ -1,4 +1,4 @@
-Cada aluno cria sua própria .venv
+Cada aluno deve criar sua própria .venv
 
 Essa parte é importante. A .venv não vem do GitHub. Cada aluno cria a sua.
 
