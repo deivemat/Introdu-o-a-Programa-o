@@ -26,3 +26,7 @@ E instala:
 
 python3 -m pip install -r requirements.txt
 
+//*************** Desativar **************
+Windows e Linux---> deactivate
+
+
