@@ -1,0 +1,162 @@
+import pygame
+# -----------------------------------
+# INICIALIZAÇÃO DO PYGAME
+# -----------------------------------
+pygame.init()
+# -----------------------------------
+# CONFIGURAÇÕES DA JANELA
+# -----------------------------------
+LARGURA = 900
+ALTURA = 600
+tela = pygame.display.set_mode((LARGURA, ALTURA))
+pygame.display.set_caption("Batalha das Funções")
+# -----------------------------------
+# CORES
+# -----------------------------------
+AZUL_ESCURO = (8, 18, 45)
+AZUL = (40, 160, 255)
+AZUL_CLARO = (80, 190, 255)
+BRANCO = (245, 245, 245)
+# -----------------------------------
+# FONTES
+# -----------------------------------
+fonte = pygame.font.SysFont("arial",40,bold=True)
+fonte_texto = pygame.font.SysFont("arial",24)
+# -----------------------------------
+# TEXTOS DA TELA INICIAL
+# -----------------------------------
+titulo = fonte.render("BATALHA DAS FUNÇÕES",True,BRANCO)
+missao = fonte_texto.render("Reconecte a rede de energia!",True,BRANCO)
+# -----------------------------------
+# IMAGEM DE FUNDO
+# -----------------------------------
+fundo = pygame.image.load("imagens/background.png").convert()
+fundo = pygame.transform.scale(fundo,(LARGURA, ALTURA))
+# -----------------------------------
+# CRIAÇÃO DOS BOTÕES
+# -----------------------------------
+botao_iniciar = pygame.Rect(
+    350,    # posição x
+    400,    # posição y
+    200,    # largura
+    50      # altura
+)
+botao_voltar = pygame.Rect(
+    30,     # posição x
+    30,     # posição y
+    120,    # largura
+    45      # altura
+)
+# -----------------------------------
+# FUNÇÃO PARA DESENHAR BOTÕES
+# -----------------------------------
+def criaBotao(botao, texto):
+    # pega a posição atual do mouse
+    pos_mouse = pygame.mouse.get_pos()
+    # verifica se o mouse está sobre o botão
+    if botao.collidepoint(pos_mouse):
+        cor_botao = AZUL_CLARO
+    else:
+        cor_botao = AZUL
+    # desenha o retângulo do botão
+    pygame.draw.rect(tela,cor_botao,botao)
+    # cria o texto do botão
+    texto_botao = fonte_texto.render(texto,True,BRANCO)
+    # centraliza o texto dentro do botão
+    texto_rect = texto_botao.get_rect(center=botao.center)
+    # desenha o texto
+    tela.blit(texto_botao,texto_rect)
+# -----------------------------------
+# FUNÇÃO DA TELA INICIAL
+# -----------------------------------
+def telaInicial():
+    # desenha a imagem de fundo
+    tela.blit(fundo,(0, 0))
+    # desenha o título
+    tela.blit(titulo,(230, 100))
+    # desenha a missão
+    tela.blit(missao,(290, 170))
+    # desenha o botão iniciar
+    criaBotao(botao_iniciar,"INICIAR")
+# -----------------------------------
+# FUNÇÃO DA TELA DO JOGO
+# -----------------------------------
+def telaJogo():
+    # fundo da tela do jogo
+    tela.fill(AZUL_ESCURO)
+    # texto provisório
+    texto_jogo = fonte.render("TELA DO JOGO",True,BRANCO)
+    # centraliza o texto
+    texto_rect = texto_jogo.get_rect(center=(LARGURA // 2, ALTURA // 2))
+    # desenha o texto
+    tela.blit(texto_jogo,texto_rect)
+    # desenha o botão voltar
+    criaBotao(botao_voltar,"VOLTAR")
+# -----------------------------------
+# CONTROLE DA TELA
+# -----------------------------------
+tela_atual = "inicio"
+# -----------------------------------
+# LOOP PRINCIPAL
+# -----------------------------------
+rodando = True
+while rodando:
+    # --------------------------------
+    # EVENTOS
+    # --------------------------------
+    for evento in pygame.event.get():
+        # fechar a janela
+        if evento.type == pygame.QUIT:
+            rodando = False
+        # clique do mouse
+        if evento.type == pygame.MOUSEBUTTONDOWN:
+            # -------------------------
+            # CLIQUE NA TELA INICIAL
+            # -------------------------
+            if tela_atual == "inicio":
+                if botao_iniciar.collidepoint(evento.pos):
+                    tela_atual = "jogo"
+            # -------------------------
+            # CLIQUE NA TELA DO JOGO
+            # -------------------------
+            elif tela_atual == "jogo":
+                if botao_voltar.collidepoint(evento.pos):
+                    tela_atual = "inicio"
+    # --------------------------------
+    # POSIÇÃO DO MOUSE
+    # --------------------------------
+    pos_mouse = pygame.mouse.get_pos()
+    # --------------------------------
+    # CURSOR NA TELA INICIAL
+    # --------------------------------
+    if tela_atual == "inicio":
+        if botao_iniciar.collidepoint(pos_mouse):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+    # --------------------------------
+    # CURSOR NA TELA DO JOGO
+    # --------------------------------
+    elif tela_atual == "jogo":
+        if botao_voltar.collidepoint(pos_mouse):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+    # --------------------------------
+    # ESCOLHA DA TELA
+    # --------------------------------
+    if tela_atual == "inicio":
+        telaInicial()
+    elif tela_atual == "jogo":
+        telaJogo()
+    # --------------------------------
+    # ATUALIZAÇÃO DA JANELA
+    # --------------------------------
+
+    pygame.display.flip()
+# -----------------------------------
+# FINALIZAÇÃO
+# -----------------------------------
+
+pygame.quit()
